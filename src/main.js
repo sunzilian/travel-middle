@@ -5,6 +5,7 @@ import router from './router'
 import api from '@/api';
 import ElementUI from 'element-ui'
 import './styles.scss'
+import 'normalize.css';
 
 Vue.use(ElementUI)
 
