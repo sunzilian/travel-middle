@@ -7,6 +7,8 @@ import ElementUI from 'element-ui'
 import './styles.scss'
 import 'normalize.css';
 
+console.log(router);
+
 Vue.use(ElementUI)
 
 Vue.prototype.$api = api;
