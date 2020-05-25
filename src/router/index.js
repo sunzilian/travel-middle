@@ -20,12 +20,25 @@ Vue.use(VueRouter)
 export const routes = [
   {
     path: '/',
-    redirect: '/login'
+    redirect: '/news'
   },
   {
     name: 'login',
     path: '/login',
     component: () => import( /* webpackChunkName: "login" */ '../views/Login.vue')
+  },
+  {
+    name: 'user',
+    path: '/user',
+    redirect: '/user',
+    component: mainLayout,
+    children: [
+      {
+        name: 'user',
+        path: '',
+        component: () => import( /* webpackChunkName: "user" */ '../views/User.vue')
+      },
+    ]
   },
   {
     name: 'news',

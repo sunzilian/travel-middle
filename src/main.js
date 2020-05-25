@@ -7,7 +7,8 @@ import ElementUI from 'element-ui'
 import './styles.scss'
 import 'normalize.css';
 
-console.log(router);
+import './common.css';
+import './common.styl';
 
 Vue.use(ElementUI)
 

@@ -1,0 +1,303 @@
+@font-face {
+  font-family: 'iconfont';  /* project id 689636 */
+  src: url('//at.alicdn.com/t/font_689636_whgt435bysi.eot');
+  src: url('//at.alicdn.com/t/font_689636_whgt435bysi.eot?#iefix') format('embedded-opentype'),
+  url('//at.alicdn.com/t/font_689636_whgt435bysi.woff') format('woff'),
+  url('//at.alicdn.com/t/font_689636_whgt435bysi.ttf') format('truetype'),
+  url('//at.alicdn.com/t/font_689636_whgt435bysi.svg#iconfont') format('svg');
+}
+
+[class*=" hdl-"],
+[class^=hdl-] {
+	font-family: "iconfont" !important;
+	font-style: normal;
+	font-weight: 400;
+	font-variant: normal;
+	text-transform: none;
+	line-height: 1;
+	vertical-align: baseline;
+	display: inline-block;
+	-webkit-font-smoothing: antialiased;
+	-moz-osx-font-smoothing: grayscale;
+}
+
+.hdl-user:before {
+  content: '\e6a4';
+}
+
+.hdl-time:before {
+  content: '\e6a3';
+}
+
+.hdl-logout:before {
+  content: '\e6a2';
+}
+
+.hdl-new:before {
+	content: '\e667';
+}
+
+.hdl-add:before {
+	content: '\e616';
+}
+
+.hdl-sub:before {
+	content: '\e617';
+}
+
+*{
+	padding: 0;  
+	margin: 0;
+	font-family:"Microsoft Yahei","Arial","SimSun"; 
+	box-sizing: border-box;
+}
+
+html, body {  
+	position: absolute;
+	left: 0;
+	right: 0;
+	top: 0;
+	bottom: 0;
+}
+
+body{
+	background-color: #eff2f7; 
+	font-size: 14px;
+}
+
+input, textarea, keygen, select, button{
+	font-family:"Microsoft Yahei","Arial","SimSun"; 
+	font-size: 14px;outline: none;
+}
+
+ul, li, h1, h2, h3, h4, h5, p{  
+	padding: 0;  
+	margin: 0;  
+	list-style: none;
+}
+
+img {
+	vertical-align: top;
+}
+
+textarea{
+	font-family:"Microsoft Yahei","Arial","SimSun";
+}
+
+a {
+	text-decoration: none;
+	color: #333;
+}
+
+a:focus{
+	outline:none;
+}
+
+.clearfix{ 
+	zoom:1;
+}
+
+.clearfix:after{
+	clear:both;
+	content:'';
+	display:block;
+}
+
+.el-button--mini.is-round{
+	height: 28px;
+}
+
+.el-table{
+	border: 1px solid #dfdfeb;
+	font-size: 12px;
+}
+
+.el-table__header{
+	border-bottom: 1px solid #dfdfeb;
+}
+
+/* .el-table__row:nth-last-of-type(1) td{
+	border: none;
+} */
+
+.el-pagination{
+	margin: 10px 0 0 0;
+}
+
+.el-pagination.is-background .btn-next, .el-pagination.is-background .btn-prev, .el-pagination.is-background .el-pager li{
+	background: #fff;
+	border: 1px solid #e1e1ed;
+}
+
+.el-date-editor .el-range-separator {
+	width: 7%;
+}
+
+.super-wrap {
+	position: relative;
+}
+.sub-wrap {	
+	background: #eff2f7;
+	z-index: 2000;
+	position: absolute;
+	top: 0;
+	bottom: 0;
+	left: 0;
+	right: 0;
+}
+
+/* 懒加载组件自定义动画 */
+.lazy-component-enter {
+    opacity: 0;
+  }
+.lazy-component-enter-to {
+    opacity: 1;
+  }
+.lazy-component-enter-active {
+    transition: all 0.5s;
+    position: absolute;
+    top: 0;
+    width: 100%;
+  }
+.lazy-component-leave {
+    opacity: 1;
+  }
+.lazy-component-leave-to {
+    opacity: 0;
+  }
+.lazy-component-leave-active {
+    transition: all 0.5s ease-in-out;
+  }
+.fl {
+	float: left;
+}
+
+.fr {
+	float: right;
+}
+.wt160 {
+	width: 160px!important;
+}
+
+.wt120 {
+	width: 120px!important;
+}
+
+.wt80 {
+	width: 80px;
+}
+
+/* 头部条件搜索公共样式设置 */
+
+.item li {
+	float: left;
+	margin-top: 15px;
+	margin-right: 15px;
+}
+.item.fr li:last-child {
+	margin-right: 0px;
+}
+.item-lab {
+	font-size: 14px;
+	color: #656574;
+	margin-right: 5px;
+}
+/* 输入框 */
+.el-input__inner {
+	padding: 0 10px;
+	background-color: #fafaff;
+}
+.el-date-editor .el-range-input {
+	background-color: #fafaff;
+}
+.popper__arrow {
+	left: 70px!important;
+}
+.el-textarea__inner{
+	background-color: #fafaff;
+	resize: none;
+}
+/* 常用按钮 */
+.el-button--primary,.el-button--primary:focus {
+	color: #fff;
+	background-color: #029aef;
+	border: none;
+	cursor: pointer;
+}
+.el-button--primary:hover {
+	color: #fff;
+	background-color: #66b1ff;
+}
+/* 取消按钮1 */
+.cancel-btn,.cancel-btn:focus {
+	color: #4f4f5c;
+	background-color: #e6e6f5;
+	border-radius: 4px;
+	border: none;
+}
+.cancel-btn:hover {
+	color: #4f4f5c;
+	background-color: #eee;
+}
+/* 底部分页设置 */
+.el-pagination {
+	padding: 10px 0;
+}
+.el-pagination .el-select .el-input {
+	margin: 0;
+}
+.el-pagination .btn-prev {
+	padding: 0 6px;
+	margin-right: 5px;
+}
+.el-pager .number {
+	margin-right: 5px;
+}
+
+/* 弹框提示位置 */
+.el-message {
+	top: 100px;
+}
+
+/* table表格 */
+.table-list {
+	margin-top: 5px;
+	border: solid 1px #dfdfeb;
+	border-radius: 4px;
+}
+.el-table th,.el-table td {
+	text-align: center;
+	color: #5b5c5f;
+}
+.el-button--text,.el-button--text:focus,.el-button--text:hover {
+	color: #5b5c5f;
+	text-decoration: underline;
+	font-size: 14px;
+}
+/* 底部分页设置 */
+.el-pager li.active {
+	color: #fff;
+	background-color: #029aef;
+	cursor: default;
+}
+.el-pager li {
+	color: #656574;
+}
+
+/* 多选框 */
+.el-checkbox__input.is-checked .el-checkbox__inner, .el-checkbox__input.is-indeterminate .el-checkbox__inner {
+	background-color: #029aef;
+	color: #029aef;
+	border-color: #029aef;
+}
+.el-checkbox__input.is-focus .el-checkbox__inner {
+	border-color: #dcdfe6;
+}
+.el-checkbox__input.is-checked+.el-checkbox__label {
+	color: #656574;
+}
+
+/* tabs切换 */
+.el-tabs--border-card>.el-tabs__header .el-tabs__item.is-active,.el-tabs--border-card>.el-tabs__header .el-tabs__item:hover {
+	color: #656574;
+}

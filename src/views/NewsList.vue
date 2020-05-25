@@ -1,117 +1,176 @@
 <template>
-  <div class="admin">
-    <!-- admin -->
-    <h3 style="font-size: 32px;">会员登录管理</h3>
-    <el-form
-      :model="administratorForm"
-      status-icon
-      :rules="rules"
-      ref="administratorForm"
-      label-width="100px"
-      class="administrator-form"
-    >
-      <el-form-item label="用户名" prop="username">
-        <el-input v-model.number="administratorForm.username"></el-input>
-      </el-form-item>
-      <el-form-item label="密码" prop="pass">
-        <el-input
-          type="password"
-          v-model="administratorForm.pass"
-          autocomplete="off"
-        ></el-input>
-      </el-form-item>
-      <el-form-item>
-        <el-button type="primary" @click="submitForm('administratorForm')"
-          >提交</el-button
-        >
-        <el-button @click="resetForm('administratorForm')">重置</el-button>
-      </el-form-item>
-    </el-form>
+  <div class="news-list">
+    新闻list
+     <div class="table-list">
+      <el-table
+        v-loading="loading"
+        ref="tableDate"
+        :data="tableDate"
+        highlight-current-row
+        style="width: 100%">
+        <el-table-column
+          type="index"
+          label="序号"
+          width="80">
+        </el-table-column>
+        <el-table-column
+          property="title"
+          label="名称">
+        </el-table-column>
+        <el-table-column
+          property="datePush"
+          label="发布时间">
+        </el-table-column>
+        <el-table-column
+          label="操作">
+          <template slot-scope="scope">
+            <el-button @click="view(scope.row)" type="text" size="small">查看</el-button>
+            <el-button @click="edit(scope.row)" type="text" size="small">编辑</el-button>
+            <el-button @click="deleteNews(scope.row)" type="text" size="small">删除</el-button>
+          </template>
+        </el-table-column>
+      </el-table>
+    </div>
+    <el-pagination
+      @size-change="handleSizeChange"
+      @current-change="handleCurrentChange"
+      :current-page="currentPage"
+      :page-sizes="PAGE_SIZE"
+      :page-size="pageSize"
+      layout="sizes, total, prev, pager, next, jumper"
+      :total="total">
+    </el-pagination>
   </div>
 </template>
 
 <script>
-// @ is an alias to /src
-// import HelloWorld from '@/components/HelloWorld.vue'
-
 export default {
-  name: 'news',
   data() {
-    let usernameCheck = (rule, value, callback) => {
-      if (!value) {
-        callback(new Error('请输入用户名'));
-      }
-      callback();
-    };
-    let validatePass = (rule, value, callback) => {
-      if (value === "") {
-        callback(new Error("请输入密码"));
-      } else {
-        if (this.administratorForm.checkPass !== "") {
-          this.$refs.administratorForm.validateField("checkPass");
-        }
-        callback();
-      }
-    };
+    // let {currentPage = 1, pageSize = 10,title ='' } = this.$route.query;
     return {
-      errorMessage: '',
-      administratorForm: {
-        username: '',
-        pass: '',
-        checkPass: ''
-      },
-      rules: {
-        username: [{validator: usernameCheck, trigger: 'blur'}],
-        pass: [{ validator: validatePass, trigger: 'blur' }]
-      }
-    };
+      // currentPage: parseInt(this.currentPage),
+      // pageSize: parseInt(this.pageSize),
+      currentPage: 1,
+      pageSize: 10,
+      total: 60,
+      PAGE_SIZE: [10, 50, 100, 200],
+      // user: {
+      //   title
+      // },
+      roleOptions: [],
+      // tableDate: [],
+      tableDate: [
+        {
+          "id": 94,
+          "title": "话题跳转",
+          "content": "<p><a href=\"about:blank\" target=\"_blank\">话题</a></p>",
+          "imgUrl": null,
+          "datePush": "2020-05-18"
+        }
+      ],
+      loading: false,
+      query: null
+    }
   },
-  components: {
-    // HelloWorld
-  },
-  mounted() {
-    this.$api.exampleModule.getExample().then(res => {
-      console.log(res);
-    });
+  created() {
+    // this.getList()
   },
   methods: {
-      submitForm(formName) {
-        this.$refs[formName].validate((valid) => {
-          console.log(valid, this);
-          if (valid) {
-            // alert('submit!');
-            setTimeout(() => {
-              this.$router.push('home');
-              window.localStorage.setItem('userName', 'user')
-              window.localStorage.setItem('isLogin', true)
-            }, 1000);
-          } else {
-            console.log('error submit!!');
-            return false;
-          }
-          // this.errorMessage="错误提示"
-        });
-      },
-      resetForm(formName) {
-        this.$refs[formName].resetFields();
-      }
+    // 获取用户列表
+    // getList() {
+    //   let {currentPage = 1, pageSize = 10,title = ''} = this.$route.query;
+    //   this.query = this.$route.query;
+    //   this.loading = true;
+    //   let data = {
+    //     params: {
+    //       title,
+    //       currentPage,
+    //       pageSize
+    //     }
+    //   }
+    //   selectNewsListByPage(data).then(res => {
+    //     this.loading = false;
+    //     if (res.data) {
+    //       this.tableDate = res.data.data
+    //       this.currentPage = res.data.currentPage
+    //       this.pageSize = res.data.pageSize
+    //       this.total = res.data.total
+    //     }
+    //   }).catch(err => {
+    //     this.loading = false;
+    //     if(!this.$axios.isCancel(err)){
+    //       this.$message.error(err.message);
+    //     }
+    //   })
+    // },
+    // 搜索
+    search(){
+      let { title} = this.user
+      this.$router.replace({query: {...this.query,title, currentPage: 1}})
+    },
+    // 查看
+    view(row) {
+      this.$router.push({name:'newsDetail',query:{id:row.id}})
+    },
+    // 编辑
+    edit(row) {
+      this.$router.push({name:'newsDetail',query:{id:row.id,modify:true}})
+    },
+    // 添加
+    addNews() {
+      this.$router.push({name:'newsDetail',query:{modify:true}})
+    },
+    // 删除
+    deleteNews(row) {
+      this.$confirm('确定删除?', '', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning',
+        center: true
+      }).then(() => {
+        let data = {
+          id: row.id
+        }
+        console.log(data);
+        // delNews(data).then(res => {
+        //   this.getList()
+        //   this.$message.success('删除成功')
+        // }).catch(err => {
+        //   if(!this.$axios.isCancel(err)){
+        //     this.$message.error(err.message);
+        //   }
+        // })
+      }).catch(() => {
+        this.$message({
+          type: 'info',
+          message: '已取消删除',
+          showClose: true
+        });          
+      });
+    },
+    handleSizeChange(pageSize) {
+      this.$router.replace({query: { ...this.query, pageSize, currentPage: 1 }})
+    },
+    handleCurrentChange(currentPage) {
+      this.$router.replace({query: { ...this.query, currentPage }})
+    },
+  },
+  watch: {
+    '$route': function () {
+      this.getList()
     }
-};
+  }
+}
 </script>
 
 <style lang="stylus">
-.admin
-  position: absolute;
-  top: 0;
-  left: 0;
-  bottom: 0;
-  right: 0;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  flex-direction: column
-
-.administrator-form
-  width 30%
-  min-width 400px
+.user-management
+  .header
+    background-color #fff
+    border solid 1px #dfdfeb
+    border-radius 4px
+    box-sizing border-box
+    padding 0 20px 15px
+ 
 </style>
+
