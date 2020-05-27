@@ -1,6 +1,7 @@
 <template>
   <div class="news-list">
     新闻list
+    <el-button @click="addNews()" size="medium" type="primary">新建</el-button>
      <div class="table-list">
       <el-table
         v-loading="loading"
@@ -118,6 +119,7 @@ export default {
     },
     // 添加
     addNews() {
+      // console.log('add new list')
       this.$router.push({name:'newsDetail',query:{modify:true}})
     },
     // 删除

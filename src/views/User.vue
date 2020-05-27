@@ -32,7 +32,7 @@
         </el-table-column>
       </el-table>
     </div>
-    <el-pagination
+    <!-- <el-pagination
       @size-change="handleSizeChange"
       @current-change="handleCurrentChange"
       :current-page="currentPage"
@@ -40,7 +40,7 @@
       :page-size="pageSize"
       layout="sizes, total, prev, pager, next, jumper"
       :total="total">
-    </el-pagination>
+    </el-pagination> -->
   </div>
 </template>
 
@@ -95,7 +95,8 @@ export default {
       rules: {
         username: [{validator: usernameCheck, trigger: 'blur'}],
         pass: [{ validator: validatePass, trigger: 'blur' }]
-      }
+      },
+      loading: false
     };
   },
   components: {

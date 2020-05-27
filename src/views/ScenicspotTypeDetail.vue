@@ -1,6 +1,6 @@
 <template>
   <div class="scenicspot-type-details">
-    sssss
+    sssss type
       <el-form  :model="newsForm" :rules="userRules" ref="newsForm" label-width="30px" class="demo-ruleForm">
           <el-form-item prop="title">
             <el-col :span="10">

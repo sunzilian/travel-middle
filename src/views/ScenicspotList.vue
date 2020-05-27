@@ -2,6 +2,7 @@
   <div class="scenicspot-yype-list">
     ScenicspotTypeList
     景点list
+    <el-button @click="addNews()" size="medium" type="primary">新建</el-button>
      <div class="table-list">
       <el-table
         v-loading="loading"

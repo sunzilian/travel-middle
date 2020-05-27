@@ -108,11 +108,11 @@ export default {
   },
   methods: {
     edit(row) {
-      this.$router.push({name:'scenicspotDetail',query:{id:row.id,modify:true}})
+      this.$router.push({name:'scenicspotTypeDetail',query:{id:row.id,modify:true}})
     },
     // 添加
     addNews() {
-      this.$router.push({name:'scenicspotDetail',query:{modify:true}})
+      this.$router.push({name:'scenicspotTypeDetail',query:{modify:true}})
     },
     // 删除
     deleteNews(row) {
