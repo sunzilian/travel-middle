@@ -1,9 +1,9 @@
 <template>
-  <div class="news-details">
-    sssss
-      <el-form  :model="newsForm" :rules="userRules" ref="newsForm" label-width="30px" class="demo-ruleForm">
-          <el-form-item prop="title">
-            <el-col :span="10">
+  <div class="news-details" style="padding-top: 20px">
+    <h2 style="text-align:left">新增景点</h2>
+      <el-form  :model="newsForm" :rules="userRules" ref="newsForm" label-width="60px" class="demo-ruleForm" style="margin-top:20px">
+          <el-form-item prop="title" label="标题">
+            <el-col :span="20">
               <el-input
                 v-model.trim="newsForm.title"
                 placeholder="请输入标题"
@@ -15,13 +15,14 @@
               </el-input>
             </el-col>
           </el-form-item>
-          <el-form-item>
-            <el-col :span="16">
-              <span>类型</span>
+          <el-form-item label="类型" required>
+            <!-- <el-col :span="1"><span>类型</span></el-col> -->
+            <el-col :span="22" style="text-align: left;">
+              <!-- <span>类型</span> -->
               <el-radio v-for="item in loveList" :key="item.id" v-model="newsForm.love" :label="item.id">{{item.name}}</el-radio>
             </el-col>
           </el-form-item>
-          <el-form-item>
+          <el-form-item label="封面" required>
             <el-col :span="20">
               <!-- <div class="block" v-for="item in fields">
                 <img class="img-show" v-if="item.url" :src="item.url" alt="">
@@ -31,7 +32,7 @@
               <el-upload
                 class="upload-demo"
                 ref="upload"
-                action="http://ce9f9f5b.ngrok.io/scenicspot/back/upload"
+                :action="`${BASE_URL}/scenicspot/back/upload`"
                 :on-success="onSuccess"
                 accept=".jpg,.png,.jpeg,.gif"
                 :limit="1"
@@ -60,7 +61,7 @@
       <el-upload
         style="display:none"
         ref="uploadIcon"
-        action="http://ce9f9f5b.ngrok.io/scenicspot/back/upload"
+        :action="`${BASE_URL}/scenicspot/back/upload`"
         :on-success="handleSuccess"
         :on-exceed="handleExceed"
         :on-remove="handleRemove"
@@ -112,7 +113,7 @@ const fontSizeStyle = Quill.import('attributors/style/size');
 fontSizeStyle.whitelist = ['10px', false, '14px', '16px', '20px', '24px','32px','36px'];
 Quill.register(fontSizeStyle, true);
 
-const BASE_URL = 'http://ce9f9f5b.ngrok.io/'
+const BASE_URL = 'http://947255bcd7d3.ngrok.io/'
 
 export default {
   components: {
@@ -132,6 +133,8 @@ export default {
       }
     };
     return {
+      BASE_URL,
+      picUrls: [],
       coverImg: '',
       iconUrls:[], 
       fileList:[],
@@ -139,10 +142,10 @@ export default {
       getAuthCode: function() {},  
       contentLength:0,
       newsForm: {
-        title:'海底捞供应链调查 | 一锅红汤“养活”10多家关联公司',
-        id: '',
-        // eslint-disable-next-line no-useless-escape
-        content:'<p><span style=\"font-size: 16px;\">在经历了多年的传言之后，国内餐饮业巨头海底捞上市终于迎来实质性动作。5月17日晚间，海底捞在开曼群岛注册的海底捞国际控股公司向港交所递交了招股书。</span></p><p><span style=\"font-size: 16px;\">透过海底捞招股书可见，海底捞IPO不仅能让公司创始人获益匪浅，也揭开了海底捞董事长张勇背后的资本帝国，同时，依靠“一锅红汤”而不断壮大的企业也浮出水面。</span></p><p><span style=\"font-size: 16px;\">张勇的资本帝国</span></p><p><span style=\"font-size: 16px;\"><img src=\"https://hdl-emas-app-bucket.oss-cn-beijing.aliyuncs.com/app/news/image/ffe009c3e57d40cf8ab0b45e940b89e7-340-228.png\"><img src=\"https://hdl-emas-app-bucket.oss-cn-beijing.aliyuncs.com/app/news/image/36ce572fa16d4d7f8a6fcccc8dd08df2-340-228.png\"></span></p><p><span style=\"font-size: 16px;\">彼时，1994年，海底捞董事长张勇和他的小伙伴们，四个人合伙在四川省简阳市创办了一家名为“海底捞火锅城”的火锅店，那时火锅店里只有四张桌子。</span></p><p><span style=\"font-size: 16px;\">如今，海底捞在招股书中公布，目前运营的餐厅数量达到了320家，包括中国内地的296家餐厅以及24家位于中国台湾、中国香港以及海外在新加坡、韩国、日本及美国的餐厅。</span></p><p><span style=\"font-size: 16px;\">海底捞还表示，上市募集资金后，海底捞计划将募资的60%用于扩张，20%拟用于研发和实施新技术，15%拟用于还贷，5%作为一般营运资金使用。</span></p><p><span style=\"font-size: 16px;\">伴随着海底捞招股书的面世，公司掌门人张勇的资本帝国也浮出水面。虽然这是海底捞首次上市，但与之有关联的两家公司早已涉足资本市场。一家是颐海国际，另一家是优鼎优。</span></p><p><span style=\"font-size: 16px;\">2016年，作为海底捞底料独家供应商的颐海国际登陆香港交易所；2017年，海底捞旗下冒菜品牌优鼎优登陆新三板。</span></p><p><span style=\"font-size: 16px;\">资料显示，颐海国际的实际控制人是张勇夫妇，直接持股35.59%，并通过合计持股68%的静远投资间接持有颐海国际50%的股份。颐海国际的现任董事长施永宏乃张勇海底捞的合伙创始人。</span></p><p><span style=\"font-size: 16px;\">据公司年报显示，火锅底是料颐海国际主要的收入来源，占全年收入的79%。</span></p>'
+        // title:'海底捞供应链调查 | 一锅红汤“养活”10多家关联公司',
+        // id: '',
+        // // eslint-disable-next-line no-useless-escape
+        // content:'<p><span style=\"font-size: 16px;\">在经历了多年的传言之后，国内餐饮业巨头海底捞上市终于迎来实质性动作。5月17日晚间，海底捞在开曼群岛注册的海底捞国际控股公司向港交所递交了招股书。</span></p><p><span style=\"font-size: 16px;\">透过海底捞招股书可见，海底捞IPO不仅能让公司创始人获益匪浅，也揭开了海底捞董事长张勇背后的资本帝国，同时，依靠“一锅红汤”而不断壮大的企业也浮出水面。</span></p><p><span style=\"font-size: 16px;\">张勇的资本帝国</span></p><p><span style=\"font-size: 16px;\"><img src=\"https://hdl-emas-app-bucket.oss-cn-beijing.aliyuncs.com/app/news/image/ffe009c3e57d40cf8ab0b45e940b89e7-340-228.png\"><img src=\"https://hdl-emas-app-bucket.oss-cn-beijing.aliyuncs.com/app/news/image/36ce572fa16d4d7f8a6fcccc8dd08df2-340-228.png\"></span></p><p><span style=\"font-size: 16px;\">彼时，1994年，海底捞董事长张勇和他的小伙伴们，四个人合伙在四川省简阳市创办了一家名为“海底捞火锅城”的火锅店，那时火锅店里只有四张桌子。</span></p><p><span style=\"font-size: 16px;\">如今，海底捞在招股书中公布，目前运营的餐厅数量达到了320家，包括中国内地的296家餐厅以及24家位于中国台湾、中国香港以及海外在新加坡、韩国、日本及美国的餐厅。</span></p><p><span style=\"font-size: 16px;\">海底捞还表示，上市募集资金后，海底捞计划将募资的60%用于扩张，20%拟用于研发和实施新技术，15%拟用于还贷，5%作为一般营运资金使用。</span></p><p><span style=\"font-size: 16px;\">伴随着海底捞招股书的面世，公司掌门人张勇的资本帝国也浮出水面。虽然这是海底捞首次上市，但与之有关联的两家公司早已涉足资本市场。一家是颐海国际，另一家是优鼎优。</span></p><p><span style=\"font-size: 16px;\">2016年，作为海底捞底料独家供应商的颐海国际登陆香港交易所；2017年，海底捞旗下冒菜品牌优鼎优登陆新三板。</span></p><p><span style=\"font-size: 16px;\">资料显示，颐海国际的实际控制人是张勇夫妇，直接持股35.59%，并通过合计持股68%的静远投资间接持有颐海国际50%的股份。颐海国际的现任董事长施永宏乃张勇海底捞的合伙创始人。</span></p><p><span style=\"font-size: 16px;\">据公司年报显示，火锅底是料颐海国际主要的收入来源，占全年收入的79%。</span></p>'
       },
       editorOption: {
         placeholder: '输入内容...',
@@ -237,7 +240,7 @@ export default {
         if (success) {
           // this.$router.push('administrator');
           this.loveList = data;
-          console.log(data);
+          console.log(data,'ssssssss');
         }
         else {
           this.$message.error(msg)
@@ -289,7 +292,8 @@ export default {
     // 添加接口
     add(imgUrl) {
       console.log(this.newsForm, 'sssssnewForm');
-      let {title,content, id} = this.newsForm
+      let {title,content, id, love} = this.newsForm
+      console.log(love);
       this.$api.post({
         url: '/scenicspot/back/saveScenicspot',
         data: {
@@ -297,6 +301,7 @@ export default {
           title,
           content,
           id,
+          type: love,
           picture: this.coverImg
         }
       }).then(({success, msg}) => {
@@ -359,9 +364,10 @@ export default {
 left-space = 30px
 .news-details
   padding 50px 0
-  background-color #fff
+  // background-color #fff
   .img-show
-    width 100%
+    // width 100%
+    height 100%
   .clear-form-style
     line-height 1.42
     min-height 200px

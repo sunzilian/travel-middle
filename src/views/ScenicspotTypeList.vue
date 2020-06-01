@@ -1,8 +1,10 @@
 <template>
-  <div class="scenicspot-yype-list">
-    ScenicspotTypeList
-    <el-button @click="addNews()" size="medium" type="primary">新建</el-button>
-    <div class="table-list">
+  <div class="scenicspot-type-list">
+    <h2 style="text-align: left" >景点类型列表</h2>
+    <div style="text-align:right">
+      <el-button @click="addNews()" size="medium" type="primary">新建</el-button>
+    </div>
+     <div class="table-list">
       <el-table
         v-loading="loading"
         ref="tableDate"
@@ -11,28 +13,28 @@
         style="width: 100%">
         <el-table-column
           type="index"
+          property="id"
           label="序号"
           width="80">
         </el-table-column>
         <el-table-column
-          property="title"
-          label="标签">
+          property="name"
+          label="名称">
         </el-table-column>
         <!-- <el-table-column
-          property="datePush"
+          property="createDate"
           label="发布时间">
         </el-table-column> -->
         <el-table-column
           label="操作">
           <template slot-scope="scope">
-            <!-- <el-button @click="view(scope.row)" type="text" size="small">查看</el-button> -->
             <el-button @click="edit(scope.row)" type="text" size="small">编辑</el-button>
             <el-button @click="deleteNews(scope.row)" type="text" size="small">删除</el-button>
           </template>
         </el-table-column>
       </el-table>
     </div>
-    <el-pagination
+    <!-- <el-pagination
       @size-change="handleSizeChange"
       @current-change="handleCurrentChange"
       :current-page="currentPage"
@@ -40,79 +42,122 @@
       :page-size="pageSize"
       layout="sizes, total, prev, pager, next, jumper"
       :total="total">
-    </el-pagination>
+    </el-pagination> -->
   </div>
 </template>
 
 <script>
-// @ is an alias to /src
-// import HelloWorld from '@/components/HelloWorld.vue'
-
 export default {
-  name: 'scenicspot',
   data() {
-    let usernameCheck = (rule, value, callback) => {
-      if (!value) {
-        callback(new Error('请输入用户名'));
-      }
-      callback();
-    };
-    let validatePass = (rule, value, callback) => {
-      if (value === "") {
-        callback(new Error("请输入密码"));
-      } else {
-        if (this.administratorForm.checkPass !== "") {
-          this.$refs.administratorForm.validateField("checkPass");
-        }
-        callback();
-      }
-    };
+    let {currentPage = 1, pageSize = 10,title ='' } = this.$route.query;
     return {
-      currentPage: 1,
-      pageSize: 10,
+      // currentPage: parseInt(this.currentPage),
+      // pageSize: parseInt(this.pageSize),
+      currentPage,
+      pageSize,
       total: 60,
+      title,
       PAGE_SIZE: [10, 50, 100, 200],
       // user: {
       //   title
       // },
       roleOptions: [],
       // tableDate: [],
-      tableDate: [
+      // tableDate: [
+      //   {
+      //     "id": 94,
+      //     "title": "话题跳转",
+      //     "content": "<p><a href=\"about:blank\" target=\"_blank\">话题</a></p>",
+      //     "imgUrl": null,
+      //     "datePush": "2020-05-18"
+      //   }
+      // ],
+    tableDate: [
         {
-          "id": 94,
-          "title": "话题跳转",
-          "content": "<p><a href=\"about:blank\" target=\"_blank\">话题</a></p>",
-          "imgUrl": null,
-          "datePush": "2020-05-18"
+            "id": 1,
+            "name": "风景",
+            "status": 1,
+            "detected": false,
+            "createDate": null
+        },
+        {
+            "id": 2,
+            "name": "建筑",
+            "status": 1,
+            "detected": false,
+            "createDate": null
+        },
+        {
+            "id": 3,
+            "name": "历史",
+            "status": 1,
+            "detected": false,
+            "createDate": null
+        },
+        {
+            "id": 4,
+            "name": "户外",
+            "status": 1,
+            "detected": false,
+            "createDate": "2020-05-30T00:00:00.000+0000"
+        },
+        {
+            "id": 5,
+            "name": "山水",
+            "status": 1,
+            "detected": false,
+            "createDate": "2020-05-30T00:00:00.000+0000"
         }
-      ],
-      errorMessage: '',
-      administratorForm: {
-        username: '',
-        pass: '',
-        checkPass: ''
-      },
-      rules: {
-        username: [{validator: usernameCheck, trigger: 'blur'}],
-        pass: [{ validator: validatePass, trigger: 'blur' }]
-      }
-    };
+    ],
+      loading: false,
+      query: null
+    }
   },
-  components: {
-    // HelloWorld
-  },
-  mounted() {
-    this.$api.exampleModule.getExample().then(res => {
-      console.log(res);
-    });
+  created() {
+    // this.getList()
   },
   methods: {
+    // 获取用户列表
+    getList() {
+      let {currentPage = 1, pageSize = 10, title = ''} = this.$route.query;
+      this.query = this.$route.query;
+      this.loading = true;
+      let data = {
+          pageIndex: currentPage,
+          pageSize,
+          title,
+          keyWord: '  ',
+          typeId: '0'
+      }
+      this.$api.get({
+        url: '/scenicspotType/getList',
+        data
+      }).then(({success, msg, data}) => {
+      // selectNewsListByPage(data).then(res => {
+        this.loading = false;
+        console.log(data)
+        if (success) {
+
+          this.tableDate = data
+          this.currentPage = data.current
+          this.pageSize = data.size
+          this.total = data.total
+        }
+        else {
+          this.$message.error(msg);
+        }
+      }).catch(err => {
+        this.loading = false;
+        this.$message.error(err.msg);
+      })
+    },
+    // 编辑
     edit(row) {
-      this.$router.push({name:'scenicspotTypeDetail',query:{id:row.id,modify:true}})
+      this.$router.push({name:'scenicspotTypeDetail',query:{id:row.id,modify:true, name: row.name}})
     },
     // 添加
     addNews() {
-      this.$router.push({name:'scenicspotTypeDetail',query:{modify:true}})
+      this.$router.push({name:'scenicspotTypeDetail',query:{modify:true, add: true}})
     },
     // 删除
     deleteNews(row) {
@@ -139,26 +184,26 @@ export default {
           type: 'info',
           message: '已取消删除',
           showClose: true
-        });
+        });          
       });
     },
+    handleSizeChange(pageSize) {
+      this.$router.replace({query: { ...this.query, pageSize, currentPage: 1 }})
+    },
+    handleCurrentChange(currentPage) {
+      this.$router.replace({query: { ...this.query, currentPage }})
+    },
+  },
+  watch: {
+    '$route': function () {
+      this.getList()
+    }
   }
-};
+}
 </script>
 
-<style lang="stylus">
-.admin
-  position: absolute;
-  top: 0;
-  left: 0;
-  bottom: 0;
-  right: 0;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  flex-direction: column
-
-.administrator-form
-  width 30%
-  min-width 400px
+<style lang="stylus" scoped>
+.scenicspot-type-list
+  padding-top 20px
 </style>
+

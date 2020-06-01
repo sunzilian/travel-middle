@@ -1,7 +1,7 @@
 <template>
   <div class="admin">
     <!-- admin -->
-    <h3 style="font-size: 32px;">会员登录管理</h3>
+    <h3 style="font-size: 32px;">会员登录后台管理</h3>
     <el-form
       :model="administratorForm"
       status-icon
@@ -79,17 +79,31 @@ export default {
         this.$refs[formName].validate((valid) => {
           console.log(valid, this);
           if (valid) {
-            // alert('submit!');
-            setTimeout(() => {
-              this.$router.push('home');
-              window.localStorage.setItem('userName', 'user')
-              window.localStorage.setItem('isLogin', true)
-            }, 1000);
-          } else {
-            console.log('error submit!!');
-            return false;
+            let {username, pass} = this.administratorForm;
+            this.$api.get({
+              url: '/user/back/login',
+              data: {
+                userAccount: username,
+                userpwd: pass
+              }
+            // }).then(({success, data: {nickName = '', token}, msg}) => {
+            }).then(({success, data, msg}) => {
+              console.log(success,222);
+              if (success) {
+
+              console.log(success,222);
+                window.localStorage.setItem('userName', data.nickName)
+                window.localStorage.setItem('token', data.token)
+                window.localStorage.setItem('isLogin', true)
+                this.$router.push({name: 'news'});
+              }
+              else {
+                this.$message.error(msg)
+              }
+            }, rej => {
+              console.log(rej, 333);
+            })
           }
-          // this.errorMessage="错误提示"
         });
       },
       resetForm(formName) {

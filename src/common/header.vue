@@ -47,6 +47,8 @@ export default {
         closeOnClickModal: false
       }).then(() => {
         console.log(222222);
+        window.localStorage.clear();
+        window.location.reload();
         // logout({params: { channel: system }}).then(res => {
         //   this.$router.push({name: 'login'})
         //   localStorage.removeItem('authority')

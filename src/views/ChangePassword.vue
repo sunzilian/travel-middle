@@ -1,6 +1,5 @@
 <template>
   <div class="admin">
-    password
     <div class="change-content">
       <h2 class="change-title">密码修改</h2>
       <div class="change-main">
@@ -156,7 +155,7 @@ export default {
         bottom 1px
 .change-content
   margin 40px
-  min-width 1120px
+  min-width 700px
   background-color #fff
   border-bottom 1px #e6e5ed solid
   border-radius 3px

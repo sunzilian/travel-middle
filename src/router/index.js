@@ -20,7 +20,7 @@ Vue.use(VueRouter)
 export const routes = [
   {
     path: '/',
-    redirect: '/news'
+    redirect: '/login'
   },
   {
     name: 'login',
@@ -165,6 +165,34 @@ const router = new VueRouter({
       }
     }
   }
+})
+
+router.beforeEach((to, from, next) => {
+  // 未匹配路由跳转404
+  if (!to.matched.length) {
+    next({
+      name: "login"
+    })
+    return
+  }
+  // 特殊理由不做权限判断
+  if (
+    to.name !== "login" &&
+    to.name !== "503" &&
+    to.name !== "404" &&
+    to.name !== "changePassword"
+  ) {
+    let authority = localStorage.getItem("isLogin")
+    // 没有权限登录授权
+    if (!authority) {
+      next({
+        name: "login"
+      })
+      return
+    }
+  }
+
+  next()
 })
 
 export default router
