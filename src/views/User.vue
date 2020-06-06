@@ -128,7 +128,6 @@ export default {
         }
       })
       .then(({success, data}) => {
-        console.log(data,'dddddddd');
         this.commentList = data.records
         if (success) {
           console.log(data);
@@ -138,7 +137,7 @@ export default {
     },
     edit(info) {
       console.log(info);
-      this.$router.push({name:'userDetail', query: {id: info.id, modify: false}})
+      this.$router.push({name:'userDetail', query: {id: info.id, modify: true}})
     },
     deleteNews(row) {
       this.$confirm('确定删除?', '删除', {

@@ -264,11 +264,9 @@ export default {
       })
     },
     handleSizeChange(pageSize) {
-      alert(pageSize)
       this.$router.replace({query: { ...this.query, pageSize, currentPage: 1 }})
     },
     handleCurrentChange(currentPage) {
-      alert(currentPage)
       this.$router.replace({query: { ...this.query, currentPage }})
     },
     handleTop(info, top, index) {
