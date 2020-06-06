@@ -88,10 +88,7 @@ export default {
               }
             // }).then(({success, data: {nickName = '', token}, msg}) => {
             }).then(({success, data, msg}) => {
-              console.log(success,222);
               if (success) {
-
-              console.log(success,222);
                 window.localStorage.setItem('userName', data.nickName)
                 window.localStorage.setItem('token', data.token)
                 window.localStorage.setItem('isLogin', true)

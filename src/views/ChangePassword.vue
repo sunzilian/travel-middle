@@ -107,6 +107,7 @@ export default {
         if (valid) {
         let { loginName, oldPassword, newPassword, confirmPassword } = this.pwdSetting
         console.log(loginName, oldPassword, newPassword, confirmPassword);
+        this.$message.success('修改成功')
         // editPassword({ loginName, oldPassword: md5Base64(oldPassword), newPassword: md5Base64(newPassword), channel: system }).then(res => {
         // editPassword({ loginName, oldPassword, newPassword, channel: system }).then(res => {
         //   this.$router.push({name: 'login'})

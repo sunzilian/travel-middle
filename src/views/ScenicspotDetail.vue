@@ -113,7 +113,7 @@ const fontSizeStyle = Quill.import('attributors/style/size');
 fontSizeStyle.whitelist = ['10px', false, '14px', '16px', '20px', '24px','32px','36px'];
 Quill.register(fontSizeStyle, true);
 
-const BASE_URL = 'http://947255bcd7d3.ngrok.io/'
+const BASE_URL = 'http://1479c27f661d.ngrok.io'
 
 export default {
   components: {
@@ -210,11 +210,9 @@ export default {
     }
   },
   created() {
-    // console.log(ImageResize);
-    console.log(this.id, 'sssss');
-    // if (this.id) {
-    //   this.getDetails()
-    // }
+    if (this.id) {
+      this.getScenicspot()
+    }
     this.getScenicspotType()
   },
   mounted() {
@@ -241,6 +239,29 @@ export default {
           // this.$router.push('administrator');
           this.loveList = data;
           console.log(data,'ssssssss');
+        }
+        else {
+          this.$message.error(msg)
+        }
+      }, ({msg}) => {
+        this.$message.error(msg)
+      })
+    },
+    getScenicspot() {
+      this.$api.get({
+        url: '/scenicspot/back/getScenicspot',
+        data: {
+          id: this.id
+        }
+      }).then(({success, msg, data}) => {
+        if (success) {
+          console.log(342342342423423,data)
+          this.$set(this.newsForm, 'title', data.name)
+          this.$set(this.newsForm, 'content', data.context)
+          this.$set(this.newsForm, 'id', data.id)
+          this.$set(this.newsForm, 'love', data.typeId)
+          // this.coverImg = BASE_URL + data.picture
+          this.coverImg = data.picture
         }
         else {
           this.$message.error(msg)
@@ -285,13 +306,12 @@ export default {
           let imgList = this.newsForm.content.match(/<img[^>]+>/g),imgUrl;
           // eslint-disable-next-line no-useless-escape
           imgList && imgList.length && (imgUrl = imgList[0].match(/src=[\'\"]?([^\'\"]*)[\'\"]?/i)[1])
-          this.id ? this.edit(imgUrl) : this.add(imgUrl);
+          this.add(imgUrl);
         }
       });
     },
     // 添加接口
     add(imgUrl) {
-      console.log(this.newsForm, 'sssssnewForm');
       let {title,content, id, love} = this.newsForm
       console.log(love);
       this.$api.post({
@@ -299,14 +319,15 @@ export default {
         data: {
           name: title,
           title,
-          content,
+          context: content,
           id,
           type: love,
           picture: this.coverImg
         }
       }).then(({success, msg}) => {
         if (success) {
-          this.$router.push('administrator');
+          // this.$router.push('administrator');
+          this.$router.go(-1)
         }
         else {
           this.$message.error(msg)
@@ -366,7 +387,7 @@ left-space = 30px
   padding 50px 0
   // background-color #fff
   .img-show
-    // width 100%
+    width 100%
     height 100%
   .clear-form-style
     line-height 1.42

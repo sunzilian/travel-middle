@@ -25,13 +25,13 @@
           property="createDate"
           label="发布时间">
         </el-table-column> -->
-        <el-table-column
+        <!-- <el-table-column
           label="操作">
           <template slot-scope="scope">
             <el-button @click="edit(scope.row)" type="text" size="small">编辑</el-button>
             <el-button @click="deleteNews(scope.row)" type="text" size="small">删除</el-button>
           </template>
-        </el-table-column>
+        </el-table-column> -->
       </el-table>
     </div>
     <!-- <el-pagination
@@ -55,7 +55,7 @@ export default {
       // pageSize: parseInt(this.pageSize),
       currentPage,
       pageSize,
-      total: 60,
+      total: 0,
       title,
       PAGE_SIZE: [10, 50, 100, 200],
       // user: {
@@ -114,12 +114,12 @@ export default {
     }
   },
   created() {
-    // this.getList()
+    this.getList()
   },
   methods: {
     // 获取用户列表
     getList() {
-      let {currentPage = 1, pageSize = 10, title = ''} = this.$route.query;
+      let {currentPage = 1, pageSize = 50, title = ''} = this.$route.query;
       this.query = this.$route.query;
       this.loading = true;
       let data = {

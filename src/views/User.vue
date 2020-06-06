@@ -1,37 +1,54 @@
 <template>
   <div class="user-list">
-    ScenicspotTypeList
-    <el-button @click="addNews()" size="medium" type="primary">新建</el-button>
-    <div class="table-list">
-      <el-table
-        v-loading="loading"
-        ref="tableDate"
-        :data="tableDate"
-        highlight-current-row
-        style="width: 100%">
-        <el-table-column
-          type="index"
-          label="序号"
-          width="80">
-        </el-table-column>
-        <el-table-column
-          property="title"
-          label="标签">
-        </el-table-column>
-        <!-- <el-table-column
-          property="datePush"
-          label="发布时间">
-        </el-table-column> -->
-        <el-table-column
-          label="操作">
-          <template slot-scope="scope">
-            <!-- <el-button @click="view(scope.row)" type="text" size="small">查看</el-button> -->
-            <el-button @click="edit(scope.row)" type="text" size="small">编辑</el-button>
-            <el-button @click="deleteNews(scope.row)" type="text" size="small">删除</el-button>
-          </template>
-        </el-table-column>
-      </el-table>
-    </div>
+    <h2 style="text-align: left" >留言回复</h2>
+    <el-table
+      :data="commentList"
+      :show-header="true"
+      border
+      max-height="auto"
+      style="width: 98%; margin: 20px auto 0"
+      size="small"
+    >
+      <el-table-column
+        prop="title"
+        label="标题"
+        min-width="180"
+        :show-overflow-tooltip="false"
+        class-name="aa"
+      >
+      </el-table-column>
+      <!-- <el-table-column
+        prop="userName"
+        label="留言者"
+        :width="dateColumnWidth"
+        class-name="aa"
+      >
+      </el-table-column> -->
+      <el-table-column
+        prop="createDate"
+        label="评论日期"
+        :width="dateColumnWidth"
+        class-name="aa"
+      >
+      </el-table-column>
+      <el-table-column
+        prop="createDate"
+        label="状态"
+        :width="dateColumnWidth"
+        class-name="aa"
+      >
+        <template slot-scope="scope">
+          <el-button size="small">{{scope.row.status ? '已回复' : '待回复'}}</el-button>
+        </template>
+      </el-table-column>
+      <el-table-column
+        label="操作">
+        <template slot-scope="scope">
+          <el-button @click="edit(scope.row)" type="text" size="small">编辑</el-button>
+          <!-- <el-button @click="deleteNews(scope.row)" type="text" size="small">删除</el-button> -->
+        </template>
+      </el-table-column>
+    </el-table>
     <!-- <el-pagination
       @size-change="handleSizeChange"
       @current-change="handleCurrentChange"
@@ -47,106 +64,121 @@
 <script>
 // @ is an alias to /src
 // import HelloWorld from '@/components/HelloWorld.vue'
+// import NavMenu from "../../components/NavMenu";
 
 export default {
-  name: 'scenicspot',
+  name: "home",
   data() {
-    let usernameCheck = (rule, value, callback) => {
-      if (!value) {
-        callback(new Error('请输入用户名'));
-      }
-      callback();
-    };
-    let validatePass = (rule, value, callback) => {
-      if (value === "") {
-        callback(new Error("请输入密码"));
-      } else {
-        if (this.administratorForm.checkPass !== "") {
-          this.$refs.administratorForm.validateField("checkPass");
-        }
-        callback();
-      }
-    };
     return {
-      currentPage: 1,
-      pageSize: 10,
-      total: 60,
-      PAGE_SIZE: [10, 50, 100, 200],
-      // user: {
-      //   title
-      // },
-      roleOptions: [],
-      // tableDate: [],
-      tableDate: [
+      commentUserName: '',
+      commentContent: '',
+      commentList: [],
+      commentList1: [
         {
-          "id": 94,
-          "title": "话题跳转",
-          "content": "<p><a href=\"about:blank\" target=\"_blank\">话题</a></p>",
-          "imgUrl": null,
-          "datePush": "2020-05-18"
-        }
+          userName: '匿名',
+          content: '5.1推荐去哪里玩',
+          time: '2020/2/24 14:22:23',
+          replyContent: 'xxxxxxxxxxxxxxxxxxxxx',
+          replyTime: '2020/2/24 16:12:39'
+        },
+        {
+          userName: 'username',
+          content: 'content',
+          time: 'time',
+          replyContent: 'replyContent',
+          replyTime: 'replyTime'
+        },
+        
       ],
-      errorMessage: '',
-      administratorForm: {
-        username: '',
-        pass: '',
-        checkPass: ''
-      },
-      rules: {
-        username: [{validator: usernameCheck, trigger: 'blur'}],
-        pass: [{ validator: validatePass, trigger: 'blur' }]
-      },
-      loading: false
-    };
+      dateColumnWidth: 150
+    }
   },
-  components: {
-    // HelloWorld
-  },
-  mounted() {
-    this.$api.exampleModule.getExample().then(res => {
-      console.log(res);
-    });
+  created() {
+    this.getAllCommitPage()
   },
   methods: {
-    edit(row) {
-      this.$router.push({name:'scenicspotDetail',query:{id:row.id,modify:true}})
+    comfirmHandle() {
+      let {
+        commentUserName,
+        commentContent,
+        commentList
+      } = this;
+      console.log(commentUserName, commentContent);
+      commentList.push({
+          userName: commentUserName,
+          content: commentContent,
+          time: new Date().getTime(),
+          replyContent: '',
+          replyTime: ''
+        },)
+      this.commentList = commentList
+      this.cancelHandle()
     },
-    // 添加
-    addNews() {
-      this.$router.push({name:'scenicspotDetail',query:{modify:true}})
+    cancelHandle() {
+      this.commentUserName = '';
+      this.commentContent = '';
     },
-    // 删除
+    getAllCommitPage() {
+      this.$api.get({
+        url: '/comment/back/getCommentPage',
+        data: {
+          pageSize: 100,
+          pageIndex: 1,
+          status: '0'
+        }
+      })
+      .then(({success, data}) => {
+        console.log(data,'dddddddd');
+        this.commentList = data.records
+        if (success) {
+          console.log(data);
+          // this.registerForm = data;
+        }
+      })
+    },
+    edit(info) {
+      console.log(info);
+      this.$router.push({name:'userDetail', query: {id: info.id, modify: false}})
+    },
     deleteNews(row) {
-      this.$confirm('确定删除?', '', {
+      this.$confirm('确定删除?', '删除', {
         confirmButtonText: '确定',
         cancelButtonText: '取消',
         type: 'warning',
-        center: true
+        center: false,
+        closeOnClickModal: false
       }).then(() => {
-        let data = {
-          id: row.id
-        }
-        console.log(data);
-        // delNews(data).then(res => {
-        //   this.getList()
-        //   this.$message.success('删除成功')
-        // }).catch(err => {
-        //   if(!this.$axios.isCancel(err)){
-        //     this.$message.error(err.message);
-        //   }
-        // })
+       this.handleDelSce(row.id)
       }).catch(() => {
         this.$message({
           type: 'info',
           message: '已取消删除',
           showClose: true
-        });
+        });          
       });
     },
-  }
+    handleDelSce(id) {
+      this.$api.get({
+        url: '/comment/back/delete',
+        data: {id}
+      }).then(({success, msg}) => {
+        if (success) {
+          this.$message.success('删除成功')
+          this.getAllCommitPage()
+        }
+        else {
+          this.$message.error(msg)
+        }
+      }, ({msg}) => {
+        this.$message.error(msg)
+      })
+    },
+  },
 };
 </script>
 
 <style lang="stylus">
+.user-list
+  padding-top 20px
 
 </style>

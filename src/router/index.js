@@ -38,6 +38,11 @@ export const routes = [
         path: '',
         component: () => import( /* webpackChunkName: "user" */ '../views/User.vue')
       },
+      {
+        name: 'userDetail',
+        path: '/userDetail',
+        component: () => import( /* webpackChunkName: "userDetail" */ '../views/UserDetail.vue')
+      },
     ]
   },
   {

@@ -31,7 +31,8 @@
         <el-table-column
           label="操作">
           <template slot-scope="scope">
-            <el-button @click="view(scope.row)" type="text" size="small">查看</el-button>
+            <el-button v-if="+scope.row.top !== 1" @click="handleTop(scope.row, '1', scope.$index)" type="text" size="small">置顶</el-button>
+            <el-button v-else @click="handleTop(scope.row, '0', scope.$index)" type="text" size="small">取消置顶</el-button>
             <el-button @click="edit(scope.row)" type="text" size="small">编辑</el-button>
             <el-button @click="deleteNews(scope.row)" type="text" size="small">删除</el-button>
           </template>
@@ -45,7 +46,7 @@
       :page-sizes="PAGE_SIZE"
       :page-size="pageSize"
       layout="sizes, total, prev, pager, next, jumper"
-      :total="total">
+      :total="total"> 
     </el-pagination>
   </div>
 </template>
@@ -59,7 +60,7 @@ export default {
       // pageSize: parseInt(this.pageSize),
       currentPage,
       pageSize,
-      total: 60,
+      total: 0,
       title,
       PAGE_SIZE: [10, 50, 100, 200],
       // user: {
@@ -75,7 +76,8 @@ export default {
           "content": "http://www.mafengwo.cn/travel-news/1442049.html",
           "imgUrl": 'http://cache.house.sina.com.cn/infodichan/dichanpic/34/f4/3f4494ef045ae462c00745a1503d110d.jpg',
           "datePush": "2020-02-18 13:01:22",
-          publishName: 'admin'
+          publishName: 'admin',
+          top: 1
         },
         {
           "id": 2,
@@ -84,7 +86,8 @@ export default {
           "content": "http://www.mafengwo.cn/travel-news/1442048.html",
           "imgUrl": 'http://cache.house.sina.com.cn/infodichan/dichanpic/f9/ad/fa9d52e376458baa592be21a6052cb26.jpg',
           "datePush": "2020-02-18 13:11:32",
-          publishName: 'admin'
+          publishName: 'admin',
+          top: 2
         },
         {
           "id": 3,
@@ -173,32 +176,32 @@ export default {
     }
   },
   created() {
-    // this.getList()
+    this.getList()
   },
   methods: {
     // 获取用户列表
     getList() {
       let {currentPage = 1, pageSize = 10, title = ''} = this.$route.query;
+      console.log(this.$route.query);
       this.query = this.$route.query;
       this.loading = true;
       let data = {
           pageIndex: currentPage,
           pageSize,
           title,
-          keyWord: '  ',
-          typeId: '0'
+          keyWord: '',
+          top: '0'
       }
       this.$api.get({
-        url: '/scenicspot/back/getNewsPage',
+        url: '/news/back/getNewsPage',
         data
       }).then(({success, msg, data}) => {
-      // selectNewsListByPage(data).then(res => {
         this.loading = false;
         console.log(data)
         if (success) {
           this.tableDate = data.records
-          this.currentPage = data.current
-          this.pageSize = data.size
+          this.currentPage = +data.current
+          this.pageSize = +data.size
           this.total = data.total
         }
         else {
@@ -228,24 +231,14 @@ export default {
     },
     // 删除
     deleteNews(row) {
-      this.$confirm('确定删除?', '', {
+      this.$confirm('确定删除?', '删除', {
         confirmButtonText: '确定',
         cancelButtonText: '取消',
         type: 'warning',
-        center: true
+        center: false,
+        closeOnClickModal: false
       }).then(() => {
-        let data = {
-          id: row.id
-        }
-        console.log(data);
-        // delNews(data).then(res => {
-        //   this.getList()
-        //   this.$message.success('删除成功')
-        // }).catch(err => {
-        //   if(!this.$axios.isCancel(err)){
-        //     this.$message.error(err.message);
-        //   }
-        // })
+       this.handleDelNews(row.id)
       }).catch(() => {
         this.$message({
           type: 'info',
@@ -254,15 +247,54 @@ export default {
         });          
       });
     },
+    handleDelNews(id) {
+      this.$api.get({
+        url: '/news/back/delete',
+        data: {id}
+      }).then(({success, msg}) => {
+        if (success) {
+          this.$message.success('删除成功')
+          this.getList()
+        }
+        else {
+          this.$message.error(msg)
+        }
+      }, ({msg}) => {
+        this.$message.error(msg)
+      })
+    },
     handleSizeChange(pageSize) {
+      alert(pageSize)
       this.$router.replace({query: { ...this.query, pageSize, currentPage: 1 }})
     },
     handleCurrentChange(currentPage) {
+      alert(currentPage)
       this.$router.replace({query: { ...this.query, currentPage }})
     },
+    handleTop(info, top, index) {
+      console.log(3334322342344,info, top, index);
+      this.$api.get({
+        url: '/news/back/updateTop',
+        data: {
+          id: info.id,
+          top
+        }
+      }).then(({success, msg}) => {
+        if (success) {
+          this.$message.success(info.top ? '取消置顶':'置顶成功')
+          this.tableDate[index].top = !info.top
+        }
+        else {
+          this.$message.error(msg)
+        }
+      }, ({msg}) => {
+        this.$message.error(msg)
+      })
+    }
   },
   watch: {
     '$route': function () {
+      console.log('watch  route');
       this.getList()
     }
   }

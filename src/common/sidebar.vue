@@ -35,7 +35,7 @@ export default {
     // let authority = localStorage.getItem('authority')
     // authority = authority ? JSON.parse(authority) : []
     let authority = [
-      {name: 'user', nameCN: '用户操作'},
+      {name: 'user', nameCN: '留言回复'},
       {name: 'news', nameCN: '新闻资讯'},
       {name: 'scenicspotList', nameCN: '景点'},
       {name: 'scenicspotType', nameCN: '景点类型'},

@@ -183,12 +183,9 @@ export default {
     }
   },
   created() {
-    // console.log(ImageResize);
-    console.log(this.id, 'sssss');
-    // if (this.id) {
-    //   this.getDetails()
-    // }
-    this.getScenicspotType()
+    if (this.id) {
+      this.getNews()
+    }
   },
   mounted() {
     if (this.modify) {
@@ -205,6 +202,31 @@ export default {
     }
   },
   methods: {
+    
+    getNews() {
+      this.$api.get({
+        url: '/news/back/getNews',
+        data: {
+          id: this.id
+        }
+      }).then(({success, msg, data}) => {
+        if (success) {
+          // this.$router.push('administrator');
+          // this.loveList = data;
+          console.log(data,'9838838338ss');
+          // this.newsForm = data
+          this.$set(this.newsForm, 'title', data.name)
+          this.$set(this.newsForm, 'content', data.context)
+          this.$set(this.newsForm, 'id', data.id)
+
+        }
+        else {
+          this.$message.error(msg)
+        }
+      }, ({msg}) => {
+        this.$message.error(msg)
+      })
+    },
     getScenicspotType() {
       this.$api.get({
         url: '/scenicspotType/getList',
@@ -255,31 +277,29 @@ export default {
       console.log(formName);
       this.$refs[formName].validate((valid) => {     
         if (valid) {
-          let imgList = this.newsForm.content.match(/<img[^>]+>/g),imgUrl;
-          // eslint-disable-next-line no-useless-escape
-          imgList && imgList.length && (imgUrl = imgList[0].match(/src=[\'\"]?([^\'\"]*)[\'\"]?/i)[1])
-          this.id ? this.edit(imgUrl) : this.add(imgUrl);
+          // let imgList = this.newsForm.content.match(/<img[^>]+>/g),imgUrl;
+          // // eslint-disable-next-line no-useless-escape
+          // imgList && imgList.length && (imgUrl = imgList[0].match(/src=[\'\"]?([^\'\"]*)[\'\"]?/i)[1])
+          // this.id ? this.edit(imgUrl) : this.add(imgUrl);
+          console.log(this.newsForm)
+          this.addNews()
         }
       });
     },
-    // 添加接口
-    add(imgUrl) {
-      console.log(this.newsForm, 'sssssnewForm');
-      let {title,content, id, love} = this.newsForm
-      console.log(love);
+    addNews(){
+      let {id, title, content} = this.newsForm
       this.$api.post({
-        url: '/scenicspot/back/saveScenicspot',
+        url: '/news/back/saveNews',
         data: {
-          name: title,
-          title,
-          content,
           id,
-          type: love,
-          picture: this.coverImg
+          name: title,
+          context: content
         }
       }).then(({success, msg}) => {
         if (success) {
-          this.$router.push('administrator');
+          console.log('addnews success')
+          this.$router.go(-1)
+
         }
         else {
           this.$message.error(msg)
@@ -287,43 +307,8 @@ export default {
       }, ({msg}) => {
         this.$message.error(msg)
       })
-      // addNews({title,content,imgUrl}).then(res => {
-      //   this.$message.success('操作成功');
-      //   this.$router.go(-1)
-      // }).catch(err => {
-      //   if(!this.$axios.isCancel(err)){
-      //     this.$message.error(err.message);
-      //   }
-      // })
     },
-    // 添加接口
-    // edit(imgUrl) {
-    //   let {title,content} = this.newsForm
-    //   editNews({title,content,id:this.id,imgUrl}).then(res => {
-    //     this.$message.success('操作成功');
-    //     this.$router.go(-1)
-    //   }).catch(err => {
-    //     if(!this.$axios.isCancel(err)){
-    //       this.$message.error(err.message);
-    //     }
-    //   })
-    // },
-    // getDetails() {
-      // getNewsDetails({
-      //   params:{
-      //     id:this.id
-      //   }
-      // }).then(res => {
-      //   if (res.data) {
-      //     // console.log(res);
-      //     this.newsForm = res.data
-      //   }
-      // }).catch(err => {
-      //   if(!this.$axios.isCancel(err)){
-      //     this.$message.error(err.message);
-      //   }
-      // })
-    // },
+    
     cancel(formName) {
       this.$refs[formName].resetFields();
       this.$router.go(-1)

@@ -22,7 +22,7 @@ const ajax = function (type, params = {
   data: null
 }) {
   // const base_url = 'http://0d05825f.ngrok.io';
-  const base_url = 'http://947255bcd7d3.ngrok.io';
+  const base_url = 'http://1479c27f661d.ngrok.io';
   let Ruq_URL = base_url;
 
   if (type === 'get') {
@@ -41,10 +41,10 @@ const ajax = function (type, params = {
       // console.log(ajax.status);
       // 第五步：在监听函数中，判断readyState=4 && status=200表示请求成功
       if (ajax.readyState == 4 && ajax.status == 200) {
-        console.log(ajax, 888888);
+        // console.log(ajax, 888888);
         // if (ajax.readyState == 4 ) {
         // 第六步： 使用responseText、responseXML接受响应数据，并使用原生JS操作DOM进行显示
-        console.log(ajax.responseText);
+        // console.log(ajax.responseText);
         // console.log(ajax.responseXML); // 返回不是XML，显示null
         // console.log(JSON.parse(ajax.responseText));
         // console.log(eval("(" + ajax.responseText + ")"));

@@ -31,7 +31,8 @@
         <el-table-column
           label="操作">
           <template slot-scope="scope">
-            <el-button @click="view(scope.row)" type="text" size="small">查看</el-button>
+            <el-button v-if="+scope.row.top !== 1" @click="handleTop(scope.row, '1', scope.$index)" type="text" size="small">置顶</el-button>
+            <el-button v-else @click="handleTop(scope.row, '0', scope.$index)" type="text" size="small">取消置顶</el-button>
             <el-button @click="edit(scope.row)" type="text" size="small">编辑</el-button>
             <el-button @click="deleteNews(scope.row)" type="text" size="small">删除</el-button>
           </template>
@@ -41,7 +42,7 @@
     <el-pagination
       @size-change="handleSizeChange"
       @current-change="handleCurrentChange"
-      :current-page="currentPage"
+      :current-page="+currentPage"
       :page-sizes="PAGE_SIZE"
       :page-size="pageSize"
       layout="sizes, total, prev, pager, next, jumper"
@@ -59,7 +60,7 @@ export default {
       // pageSize: parseInt(this.pageSize),
       currentPage,
       pageSize,
-      total: 60,
+      total: 0,
       title,
       PAGE_SIZE: [10, 50, 100, 200],
       // user: {
@@ -173,7 +174,7 @@ export default {
     }
   },
   created() {
-    // this.getList()
+    this.getList()
   },
   methods: {
     // 获取用户列表
@@ -185,7 +186,7 @@ export default {
           pageIndex: currentPage,
           pageSize,
           title,
-          keyWord: '  ',
+          keyWord: '',
           typeId: '0'
       }
       this.$api.get({
@@ -197,7 +198,7 @@ export default {
         console.log(data)
         if (success) {
           this.tableDate = data.records
-          this.currentPage = data.current
+          this.currentPage = +data.current
           this.pageSize = data.size
           this.total = data.total
         }
@@ -228,24 +229,14 @@ export default {
     },
     // 删除
     deleteNews(row) {
-      this.$confirm('确定删除?', '', {
+      this.$confirm('确定删除?', '删除', {
         confirmButtonText: '确定',
         cancelButtonText: '取消',
         type: 'warning',
-        center: true
+        center: false,
+        closeOnClickModal: false
       }).then(() => {
-        let data = {
-          id: row.id
-        }
-        console.log(data);
-        // delNews(data).then(res => {
-        //   this.getList()
-        //   this.$message.success('删除成功')
-        // }).catch(err => {
-        //   if(!this.$axios.isCancel(err)){
-        //     this.$message.error(err.message);
-        //   }
-        // })
+       this.handleDelSce(row.id)
       }).catch(() => {
         this.$message({
           type: 'info',
@@ -260,6 +251,42 @@ export default {
     handleCurrentChange(currentPage) {
       this.$router.replace({query: { ...this.query, currentPage }})
     },
+    handleDelSce(id) {
+      this.$api.get({
+        url: '/scenicspot/back/delete',
+        data: {id}
+      }).then(({success, msg}) => {
+        if (success) {
+          this.$message.success('删除成功')
+          this.getList()
+        }
+        else {
+          this.$message.error(msg)
+        }
+      }, ({msg}) => {
+        this.$message.error(msg)
+      })
+    },
+    handleTop(info, top, index) {
+      console.log(3334322342344,info, top, index);
+      this.$api.get({
+        url: '/scenicspot/back/updateTop',
+        data: {
+          id: info.id,
+          top
+        }
+      }).then(({success, msg}) => {
+        if (success) {
+          this.$message.success(info.top ? '取消置顶':'置顶成功')
+          this.tableDate[index].top = !info.top
+        }
+        else {
+          this.$message.error(msg)
+        }
+      }, ({msg}) => {
+        this.$message.error(msg)
+      })
+    }
   },
   watch: {
     '$route': function () {
